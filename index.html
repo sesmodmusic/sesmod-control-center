@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SESMOD | Merkezi Yönetim</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#f4f5fa;font-family:Arial,sans-serif}
+header{padding:22px 18px;background:#111a30;border-bottom:1px solid #27324a}
+.brand{font-size:25px;font-weight:800;letter-spacing:2px}
+.brand span{color:#8b7cff}
+header p{color:#9da9c2;margin:7px 0 0;font-size:13px}
+.layout{display:flex;min-height:calc(100vh - 85px)}
+nav{width:220px;background:#10182b;padding:20px 12px}
+nav button{display:block;width:100%;text-align:left;padding:14px;margin:5px 0;border:0;border-radius:9px;background:transparent;color:#c5cce0;font-size:14px;cursor:pointer}
+nav button.active,nav button:hover{background:#28264d;color:white}
+main{padding:25px;width:100%;max-width:1200px;margin:auto}
+h1{font-size:25px;margin:0 0 8px}
+.sub{color:#9da9c2;font-size:14px;margin-bottom:24px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.card{background:#151f35;border:1px solid #293650;border-radius:13px;padding:20px}
+.card small{color:#aab4ca}
+.card h2{font-size:23px;margin:13px 0 5px}
+.card p{font-size:12px;color:#9da9c2;margin:0}
+.section{background:#151f35;border:1px solid #293650;border-radius:13px;padding:20px;margin-top:20px}
+.section h3{margin:0 0 12px}
+.status{display:inline-block;background:#292b43;color:#c6c2ff;padding:7px 11px;border-radius:20px;font-size:12px}
+.item{padding:13px 0;border-bottom:1px solid #293650;color:#cbd2e2;font-size:14px}
+.item:last-child{border:0}
+.content{display:none}
+.content.active{display:block}
+footer{padding:20px;text-align:center;color:#77839d;font-size:12px}
+@media(max-width:700px){
+.layout{display:block}
+nav{width:100%;display:flex;overflow-x:auto;padding:9px}
+nav button{min-width:max-content;width:auto;margin:0 4px}
+main{padding:17px}
+.cards{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">SES<span>MOD</span></div>
+  <p>Merkezi Yönetim Paneli</p>
+</header>
+
+<div class="layout">
+<nav>
+  <button class="active" onclick="showPage('dashboard',this)">Genel Bakış</button>
+  <button onclick="showPage('users',this)">Kullanıcılar</button>
+  <button onclick="showPage('music',this)">SESMOD MUSIC</button>
+  <button onclick="showPage('studio',this)">AI STUDIO</button>
+  <button onclick="showPage('finance',this)">Gelir ve Ödemeler</button>
+  <button onclick="showPage('settings',this)">Sistem Ayarları</button>
+</nav>
+
+<main>
+<section id="dashboard" class="content active">
+  <h1>Yönetim Merkezi</h1>
+  <p class="sub">SESMOD platformunun genel kontrol alanı.</p>
+  <div class="cards">
+    <div class="card"><small>Toplam kullanıcı</small><h2>—</h2><p>Veritabanı bağlantısı bekleniyor</p></div>
+    <div class="card"><small>Toplam projeler</small><h2>—</h2><p>Veritabanı bağlantısı bekleniyor</p></div>
+    <div class="card"><small>Toplam gelir</small><h2>—</h2><p>Ödeme sistemi henüz bağlanmadı</p></div>
+  </div>
+  <div class="section">
+    <h3>Sistem durumu</h3>
+    <div class="item">Hesap sistemi <span class="status">Bağlantı bekleniyor</span></div>
+    <div class="item">SESMOD MUSIC <span class="status">Hazırlanıyor</span></div>
+    <div class="item">SESMOD AI STUDIO <span class="status">Hazırlanıyor</span></div>
+    <div class="item">Ödeme sistemi <span class="status">Henüz bağlanmadı</span></div>
+  </div>
+</section>
+
+<section id="users" class="content">
+  <h1>Kullanıcı Yönetimi</h1>
+  <p class="sub">Kayıtlı kullanıcılar ve hesap yetkileri.</p>
+  <div class="section">
+    <h3>Kullanıcı işlemleri</h3>
+    <div class="item">Kullanıcı listesi — Veritabanı bağlantısı bekleniyor</div>
+    <div class="item">Yönetici ve kullanıcı rolleri — Hazırlanıyor</div>
+    <div class="item">Hesap erişimleri — Hazırlanıyor</div>
+  </div>
+</section>
+
+<section id="music" class="content">
+  <h1>SESMOD MUSIC</h1>
+  <p class="sub">Müzik dağıtımı ve sanatçı yönetimi.</p>
+  <div class="section">
+    <div class="item">Sanatçılar ve müzik kayıtları</div>
+    <div class="item">Yayın ve dağıtım takibi</div>
+    <div class="item">Telif ve izin kayıtları</div>
+    <div class="item">Sanatçı gelir raporları</div>
+    <p class="status">Modül bağlantısı bekleniyor</p>
+  </div>
+</section>
+
+<section id="studio" class="content">
+  <h1>SESMOD AI STUDIO</h1>
+  <p class="sub">Yapay zekâ ile müzik ve video üretim yönetimi.</p>
+  <div class="section">
+    <div class="item">Müzik üretim araçları</div>
+    <div class="item">Video ve kısa film projeleri</div>
+    <div class="item">Kullanıcı kredileri</div>
+    <div class="item">Paket ve abonelik yönetimi</div>
+    <p class="status">Modül bağlantısı bekleniyor</p>
+  </div>
+</section>
+
+<section id="finance" class="content">
+  <h1>Gelir ve Ödemeler</h1>
+  <p class="sub">Abonelik, kredi ve sanatçı ödeme takibi.</p>
+  <div class="section">
+    <div class="item">Abonelik gelirleri — Henüz bağlı değil</div>
+    <div class="item">Kredi satışları — Henüz bağlı değil</div>
+    <div class="item">Sanatçı hakedişleri — Henüz bağlı değil</div>
+    <div class="item">Ödeme geçmişi — Henüz bağlı değil</div>
+  </div>
+</section>
+
+<section id="settings" class="content">
+  <h1>Sistem Ayarları</h1>
+  <p class="sub">Merkezi platform yapılandırması.</p>
+  <div class="section">
+    <div class="item">Ortak SESMOD hesabı</div>
+    <div class="item">Uygulama erişim izinleri</div>
+    <div class="item">Yönetici yetkileri</div>
+    <div class="item">Güvenlik ve kayıtlar</div>
+    <p class="status">Kurulum aşamasında</p>
+  </div>
+</section>
+</main>
+</div>
+
+<footer>SESMOD © 2026 | Merkezi Yönetim Paneli</footer>
+
+<script>
+function showPage(id,button){
+  document.querySelectorAll('.content').forEach(function(section){
+    section.classList.remove('active');
+  });
+  document.querySelectorAll('nav button').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+  button.classList.add('active');
+}
+</script>
+</body>
+</html>
