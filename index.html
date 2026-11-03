@@ -161,7 +161,27 @@
           </div>
         </div>
       </section>
+<section class="panel">
+  <h2>Kullanıcı Yönetimi</h2>
+  <p class="small">Kayıtlı kullanıcıları görüntüle.</p>
 
+  <button id="loadUsersButton">Kullanıcıları Listele</button>
+
+  <p id="usersMessage" class="small"></p>
+
+  <div style="overflow-x:auto;">
+    <table style="width:100%; border-collapse:collapse; margin-top:15px;">
+      <thead>
+        <tr>
+          <th style="text-align:left; padding:8px;">E-posta</th>
+          <th style="text-align:left; padding:8px;">Rol</th>
+          <th style="text-align:left; padding:8px;">Uygulamalar</th>
+        </tr>
+      </thead>
+      <tbody id="usersTable"></tbody>
+    </table>
+  </div>
+</section>
     </main>
   </div>
 
@@ -268,7 +288,46 @@
       }
     }
 
-    checkSession();
+    checkSession(// KULLANICILARI LİSTELE
+document.getElementById("loadUsersButton").addEventListener("click", async function() {
+  const button = this;
+  const message = document.getElementById("usersMessage");
+  const table = document.getElementById("usersTable");
+
+  button.disabled = true;
+  message.textContent = "Kullanıcılar yükleniyor...";
+  table.replaceChildren();
+
+  const { data, error } = await db.rpc("admin_list_users");
+
+  button.disabled = false;
+
+  if (error) {
+    message.textContent = "Hata: " + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    message.textContent = "Henüz kullanıcı bulunamadı.";
+    return;
+  }
+
+  data.forEach(function(user) {
+    const row = document.createElement("tr");
+
+    [user.email, user.role, (user.app_access || []).join(", ")].forEach(function(value) {
+      const cell = document.createElement("td");
+      cell.style.padding = "8px";
+      cell.style.borderTop = "1px solid #394153";
+      cell.textContent = value || "-";
+      row.appendChild(cell);
+    });
+
+    table.appendChild(row);
+  });
+
+  message.textContent = data.length + " kullanıcı listelendi.";
+}););
 
     db.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT") {
