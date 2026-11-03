@@ -1,298 +1,190 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SESMOD Control Center</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: #10121a;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-    }
-
-    .panel {
-      background: #1b1f2b;
-      border: 1px solid #303747;
-      border-radius: 14px;
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-
-    h1 { color: #e5b95c; }
-    h2 { color: #e5b95c; }
-
-    input {
-      width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #444b5c;
-      background: #10121a;
-      color: white;
-      font-size: 16px;
-    }
-
-    button {
-      padding: 13px 20px;
-      border: 0;
-      border-radius: 8px;
-      background: #d6a943;
-      color: #111;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .menu {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-    }
-
-    .menu div {
-      background: #252b39;
-      border: 1px solid #394153;
-      padding: 18px;
-      border-radius: 10px;
-    }
-
-    .hidden { display: none; }
-
-    #errorBox { color: #ff7777; }
-    #successBox { color: #79d69a; }
-
-    .small {
-      color: #aab1c0;
-      font-size: 13px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SESMOD Control Center</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#10121a;color:#fff;font-family:Arial,sans-serif}
+.container{max-width:1000px;margin:25px auto;padding:16px}
+.panel{background:#1b1f2b;border:1px solid #303747;border-radius:14px;padding:20px;margin-bottom:18px}
+h1,h2{color:#e5b95c}
+input{width:100%;padding:14px;margin:8px 0;border-radius:8px;border:1px solid #444b5c;background:#10121a;color:#fff;font-size:16px}
+button{padding:13px 18px;border:0;border-radius:8px;background:#d6a943;color:#111;font-weight:bold;cursor:pointer;margin-top:10px}
+button:disabled{opacity:.5}
+.hidden{display:none}
+.small{color:#aab1c0;font-size:13px}
+.error{color:#ff7777}
+.success{color:#79d69a}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.menu div{background:#252b39;border:1px solid #394153;padding:16px;border-radius:10px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid #394153;font-size:14px}
+</style>
 </head>
-
 <body>
-  <div class="container">
+<div class="container">
 
-    <header class="panel">
-      <h1>SESMOD CONTROL CENTER</h1>
-      <p>SESMOD yönetim ve kontrol paneli</p>
-    </header>
+<header class="panel">
+<h1>SESMOD CONTROL CENTER</h1>
+<p>SESMOD yönetim ve kontrol paneli</p>
+</header>
 
-    <section id="loginBox" class="panel">
-      <h2>Yönetici Girişi</h2>
-
-      <form id="loginForm">
-        <input
-          type="email"
-          id="email"
-          placeholder="E-posta adresin"
-          required
-        >
-
-        <input
-          type="password"
-          id="password"
-          placeholder="Şifren"
-          required
-        >
-
-        <button type="submit" id="loginButton">
-          Giriş Yap
-        </button>
-      </form>
-
-      <p id="errorBox"></p>
-      <p id="successBox"></p>
-      <p class="small">Yalnızca yetkili yönetici hesapları giriş yapabilir.</p>
-    </section>
-
-    <main id="dashboard" class="hidden">
-
-      <section class="panel">
-        <h2>Genel Bakış</h2>
-        <p>Hoş geldin, <span id="userEmail"></span></p>
-        <p>Yetki: <strong id="userRole"></strong></p>
-        <button id="logoutButton">Güvenli Çıkış</button>
-      </section>
-
-      <section class="panel">
-        <h2>Yönetim Menüsü</h2>
-
-        <div class="menu">
-          <div>
-            <h3>Kullanıcılar</h3>
-            <p>Kullanıcı yönetimi</p>
-            <p class="small">Henüz etkinleştirilmedi.</p>
-          </div>
-
-          <div>
-            <h3>SESMOD MUSIC</h3>
-            <p>Müzik platformu yönetimi</p>
-            <p class="small">Henüz etkinleştirilmedi.</p>
-          </div>
-
-          <div>
-            <h3>SESMOD AI STUDIO</h3>
-            <p>Yapay zekâ stüdyosu yönetimi</p>
-            <p class="small">Henüz etkinleştirilmedi.</p>
-          </div>
-
-          <div>
-            <h3>Gelir ve Ödemeler</h3>
-            <p>Gelir ve ödeme takibi</p>
-            <p class="small">Henüz etkinleştirilmedi.</p>
-          </div>
-
-          <div>
-            <h3>Sistem Ayarları</h3>
-            <p>Genel sistem ayarları</p>
-            <p class="small">Henüz etkinleştirilmedi.</p>
-          </div>
-        </div>
-      </section>
-<section class="panel">
-  <h2>Kullanıcı Yönetimi</h2>
-  <p class="small">Kayıtlı kullanıcıları görüntüle.</p>
-
-  <button id="loadUsersButton">Kullanıcıları Listele</button>
-
-  <p id="usersMessage" class="small"></p>
-
-  <div style="overflow-x:auto;">
-    <table style="width:100%; border-collapse:collapse; margin-top:15px;">
-      <thead>
-        <tr>
-          <th style="text-align:left; padding:8px;">E-posta</th>
-          <th style="text-align:left; padding:8px;">Rol</th>
-          <th style="text-align:left; padding:8px;">Uygulamalar</th>
-        </tr>
-      </thead>
-      <tbody id="usersTable"></tbody>
-    </table>
-  </div>
+<section id="loginBox" class="panel">
+<h2>Yönetici Girişi</h2>
+<form id="loginForm">
+<input type="email" id="email" placeholder="E-posta adresin" required>
+<input type="password" id="password" placeholder="Şifren" required>
+<button type="submit" id="loginButton">Giriş Yap</button>
+</form>
+<p id="loginMessage"></p>
+<p class="small">Yalnızca yetkili yönetici hesapları giriş yapabilir.</p>
 </section>
-    </main>
-  </div>
 
-  <script>
-    // SUPABASE BAĞLANTISI
-    const SUPABASE_URL = "https://izlwpgepxyzzzsvfcuph.supabase.co";
+<main id="dashboard" class="hidden">
 
-    const SUPABASE_KEY = "sb_publishable_1tRMEPEDJgHb3rz1PF4lag_2Um3_jZl";
+<section class="panel">
+<h2>Genel Bakış</h2>
+<p>Hoş geldin: <span id="userEmail"></span></p>
+<p>Yetki: <strong id="userRole"></strong></p>
+<button id="logoutButton">Güvenli Çıkış</button>
+</section>
 
-    const db = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+<section class="panel">
+<h2>Yönetim Menüsü</h2>
+<div class="menu">
+<div><h3>Kullanıcılar</h3><p class="small">Kayıtlı kullanıcı yönetimi</p></div>
+<div><h3>SESMOD MUSIC</h3><p class="small">Müzik platformu yönetimi</p></div>
+<div><h3>SESMOD AI STUDIO</h3><p class="small">Yapay zekâ stüdyosu yönetimi</p></div>
+<div><h3>Gelir ve Ödemeler</h3><p class="small">Henüz etkinleştirilmedi.</p></div>
+<div><h3>Sistem Ayarları</h3><p class="small">Henüz etkinleştirilmedi.</p></div>
+</div>
+</section>
 
-    // SAYFA ELEMANLARI
-    const loginBox = document.getElementById("loginBox");
-    const dashboard = document.getElementById("dashboard");
-    const loginForm = document.getElementById("loginForm");
-    const loginButton = document.getElementById("loginButton");
-    const errorBox = document.getElementById("errorBox");
-    const successBox = document.getElementById("successBox");
-    const userEmail = document.getElementById("userEmail");
-    const userRole = document.getElementById("userRole");
+<section class="panel">
+<h2>Kullanıcı Yönetimi</h2>
+<p class="small">Kayıtlı hesapları, rollerini ve uygulama erişimlerini görüntüle.</p>
+<button id="loadUsersButton">Kullanıcıları Listele</button>
+<p id="usersMessage" class="small"></p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>E-posta</th>
+<th>Rol</th>
+<th>Uygulamalar</th>
+<th>Kayıt tarihi</th>
+</tr>
+</thead>
+<tbody id="usersTable"></tbody>
+</table>
+</div>
+</section>
 
-    // KULLANICI VE YETKİ KONTROLÜ
-    async function showUser(user) {
-      errorBox.textContent = "";
-      successBox.textContent = "";
+</main>
+</div>
 
-      const { data, error } = await db
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .maybeSingle();
+<script>
+const SUPABASE_URL = "https://izlwpgepxyzzzsvfcuph.supabase.co";
+const SUPABASE_KEY = "sb_publishable_1tRMEPEDJgHb3rz1PF4lag_2Um3_jZl";
 
-      if (error) {
-        errorBox.textContent = "Yetki kontrolü yapılamadı: " + error.message;
-        await db.auth.signOut();
-        return;
-      }
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      if (!data || !["owner", "admin"].includes(data.role)) {
-        errorBox.textContent = "Bu panele erişim yetkin yok.";
-        await db.auth.signOut();
-        return;
-      }
+const loginBox = document.getElementById("loginBox");
+const dashboard = document.getElementById("dashboard");
+const loginForm = document.getElementById("loginForm");
+const loginButton = document.getElementById("loginButton");
+const loginMessage = document.getElementById("loginMessage");
+const userEmail = document.getElementById("userEmail");
+const userRole = document.getElementById("userRole");
 
-      loginBox.classList.add("hidden");
-      dashboard.classList.remove("hidden");
+let currentUser = null;
 
-      userEmail.textContent = user.email || "";
-      userRole.textContent = data.role === "owner" ? "Sahip" : "Yönetici";
-    }
+function showLogin(message, isError = true) {
+  dashboard.classList.add("hidden");
+  loginBox.classList.remove("hidden");
+  loginMessage.textContent = message || "";
+  loginMessage.className = isError ? "error" : "success";
+}
 
-    // GİRİŞ
-    loginForm.addEventListener("submit", async function(event) {
-      event.preventDefault();
+async function showUser(user) {
+  const { data, error } = await db
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", user.id)
+    .maybeSingle();
 
-      errorBox.textContent = "";
-      successBox.textContent = "";
-      loginButton.disabled = true;
-      loginButton.textContent = "Kontrol ediliyor...";
+  if (error) {
+    showLogin("Yetki kontrolü yapılamadı: " + error.message);
+    await db.auth.signOut();
+    return;
+  }
 
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+  if (!data || !["owner", "admin"].includes(data.role)) {
+    showLogin("Bu panele erişim yetkin yok.");
+    await db.auth.signOut();
+    return;
+  }
 
-      const { data, error } = await db.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
+  currentUser = user;
+  loginBox.classList.add("hidden");
+  dashboard.classList.remove("hidden");
 
-      loginButton.disabled = false;
-      loginButton.textContent = "Giriş Yap";
+  userEmail.textContent = user.email || "";
+  userRole.textContent = data.role === "owner" ? "Sahip" : "Yönetici";
+  loginMessage.textContent = "";
+}
 
-      if (error) {
-        errorBox.textContent = "Giriş başarısız: " + error.message;
-        return;
-      }
+loginForm.addEventListener("submit", async function(event) {
+  event.preventDefault();
 
-      if (data.user) {
-        await showUser(data.user);
-      }
-    });
+  loginButton.disabled = true;
+  loginButton.textContent = "Kontrol ediliyor...";
+  loginMessage.textContent = "";
 
-    // ÇIKIŞ
-    document.getElementById("logoutButton").addEventListener("click", async function() {
-      await db.auth.signOut();
-      dashboard.classList.add("hidden");
-      loginBox.classList.remove("hidden");
-      loginForm.reset();
-    });
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
 
-    // KAYITLI OTURUM KONTROLÜ
-    async function checkSession() {
-      const { data, error } = await db.auth.getSession();
+  const { data, error } = await db.auth.signInWithPassword({
+    email,
+    password
+  });
 
-      if (error) {
-        errorBox.textContent = error.message;
-        return;
-      }
+  loginButton.disabled = false;
+  loginButton.textContent = "Giriş Yap";
 
-      if (data.session && data.session.user) {
-        await showUser(data.session.user);
-      }
-    }
+  if (error) {
+    showLogin("Giriş başarısız: " + error.message);
+    return;
+  }
 
-    checkSession(// KULLANICILARI LİSTELE
+  if (data.user) {
+    await showUser(data.user);
+  }
+});
+
+document.getElementById("logoutButton").addEventListener("click", async function() {
+  await db.auth.signOut();
+  currentUser = null;
+  showLogin("Güvenli çıkış yapıldı.", false);
+  loginForm.reset();
+  document.getElementById("usersTable").replaceChildren();
+  document.getElementById("usersMessage").textContent = "";
+});
+
 document.getElementById("loadUsersButton").addEventListener("click", async function() {
   const button = this;
   const message = document.getElementById("usersMessage");
   const table = document.getElementById("usersTable");
+
+  if (!currentUser) {
+    message.textContent = "Önce yönetici girişi yapmalısın.";
+    return;
+  }
 
   button.disabled = true;
   message.textContent = "Kullanıcılar yükleniyor...";
@@ -303,7 +195,7 @@ document.getElementById("loadUsersButton").addEventListener("click", async funct
   button.disabled = false;
 
   if (error) {
-    message.textContent = "Hata: " + error.message;
+    message.textContent = "Listeleme hatası: " + error.message;
     return;
   }
 
@@ -315,10 +207,17 @@ document.getElementById("loadUsersButton").addEventListener("click", async funct
   data.forEach(function(user) {
     const row = document.createElement("tr");
 
-    [user.email, user.role, (user.app_access || []).join(", ")].forEach(function(value) {
+    const values = [
+      user.email,
+      user.role,
+      (user.app_access || []).join(", "),
+      user.created_at
+        ? new Date(user.created_at).toLocaleDateString("tr-TR")
+        : "-"
+    ];
+
+    values.forEach(function(value) {
       const cell = document.createElement("td");
-      cell.style.padding = "8px";
-      cell.style.borderTop = "1px solid #394153";
       cell.textContent = value || "-";
       row.appendChild(cell);
     });
@@ -327,14 +226,30 @@ document.getElementById("loadUsersButton").addEventListener("click", async funct
   });
 
   message.textContent = data.length + " kullanıcı listelendi.";
-}););
+});
 
-    db.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_OUT") {
-        dashboard.classList.add("hidden");
-        loginBox.classList.remove("hidden");
-      }
-    });
-  </script>
+async function checkSession() {
+  const { data, error } = await db.auth.getSession();
+
+  if (error) {
+    showLogin("Oturum kontrol hatası: " + error.message);
+    return;
+  }
+
+  if (data.session && data.session.user) {
+    await showUser(data.session.user);
+  }
+}
+
+db.auth.onAuthStateChange((event) => {
+  if (event === "SIGNED_OUT") {
+    currentUser = null;
+    dashboard.classList.add("hidden");
+    loginBox.classList.remove("hidden");
+  }
+});
+
+checkSession();
+</script>
 </body>
 </html>
